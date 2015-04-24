@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Mhauri_Slack>
+            <version>0.1.0</version>
+        </Mhauri_Slack>
+    </modules>
+    <global>
+        <helpers>
+            <mhauri_slack>
+                <class>Mhauri_Slack_Helper</class>
+            </mhauri_slack>
+        </helpers>
+        <models>
+            <mhauri_slack>
+                <class>Mhauri_Slack_Model</class>
+            </mhauri_slack>
+        </models>
+        <resources>
+            <mhauri_slack_setup>
+                <setup>
+                    <module>Mhauri_Slack</module>
+                </setup>
+            </mhauri_slack_setup>
+        </resources>
+    </global>
+</config>

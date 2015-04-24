@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Mhauri_Slack>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends></depends>
+        </Mhauri_Slack>
+    </modules>
+</config>
