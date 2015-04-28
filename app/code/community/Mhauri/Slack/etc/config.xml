@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Mhauri_Slack>
-            <version>0.1.0</version>
+            <version>0.2.0</version>
         </Mhauri_Slack>
     </modules>
     <global>
@@ -23,5 +23,65 @@
                 </setup>
             </mhauri_slack_setup>
         </resources>
+        <events>
+            <sales_order_place_after>
+                <observers>
+                    <notifyNewOrder>
+                        <type>singleton</type>
+                        <class>Mhauri_Slack_Model_Observer</class>
+                        <method>notifyNewOrder</method>
+                    </notifyNewOrder>
+                </observers>
+            </sales_order_place_after>
+            <admin_session_user_login_failed>
+                <observers>
+                    <notifyAdminUserLoginFailed>
+                        <type>singleton</type>
+                        <class>Mhauri_Slack_Model_Observer</class>
+                        <method>notifyAdminUserLoginFailed</method>
+                    </notifyAdminUserLoginFailed>
+                </observers>
+            </admin_session_user_login_failed>
+            <controller_action_predispatch_customer_account_createpost>
+                <observers>
+                    <notifyNewCustomer>
+                        <type>singleton</type>
+                        <class>Mhauri_Slack_Model_Observer</class>
+                        <method>notifyNewCustomer</method>
+                    </notifyNewCustomer>
+                </observers>
+            </controller_action_predispatch_customer_account_createpost>
+        </events>
     </global>
+
+    <adminhtml>
+        <translate>
+            <modules>
+                <mhauri_hipchat>
+                    <files>
+                        <default>Mhauri_Slack.csv</default>
+                    </files>
+                </mhauri_hipchat>
+            </modules>
+        </translate>
+    </adminhtml>
+
+    <default>
+        <slack>
+            <general>
+                <enable_notification>0</enable_notification>
+                <enable_log>0</enable_log>
+            </general>
+            <api>
+                <username>Magento Slack</username>
+                <webhook_url/>
+                <channel/>
+            </api>
+            <notification>
+                <new_order>0</new_order>
+                <new_customer_account>0</new_customer_account>
+                <admin_user_login_failed>0</admin_user_login_failed>
+            </notification>
+        </slack>
+    </default>
 </config>

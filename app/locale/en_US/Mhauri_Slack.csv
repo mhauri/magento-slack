@@ -1,0 +1,3 @@
+"*A new order has been placed.* \n*Order ID:* %s, *Name:* %s %s, *Amount:* %s %s","*A new order has been placed.* \n*Order ID:* %s, *Name:* %s %s, *Amount:* %s %s"
+"*A new customer account was created*","*A new customer account was created*"
+"*Admin user login failed with username:* %s","*Admin user login failed with username:* %s"

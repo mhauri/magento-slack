@@ -1,19 +1,25 @@
 Magento Slack
 =============
 
-**THIS EXTENSION IS NOT YET USABLE**
-
 Magento Slack allows you to send specific and/or custom events to a definable room. 
 
 Facts
 -----
-- version: 0.1.0
+- version: 0.2.0
 - extension key: magento-slack
 - [extension on GitHub](https://github.com/mhauri/magento-slack)
 - [direct download link](https://github.com/mhauri/magento-slack/archive/master.zip)
 
 Description
 -----------
+
+To send a notification into a slack channel you need to create a [Incoming Webhook](https://api.slack.com/incoming-webhooks)
+
+**Available Notifications**
+
+ - Admin User Login Failed
+ - New Customer Account Created
+ - New Orders
 
 Requirements
 ------------
