@@ -83,7 +83,7 @@ class Mhauri_Slack_Model_Notification extends Mage_Core_Model_Abstract
     public function setWebhookUrl($webhook)
     {
         if(is_string($webhook)) {
-            $this->_token = $webhook;
+            $this->_webhook = $webhook;
         }
 
         return $this;
