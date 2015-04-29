@@ -1,7 +1,7 @@
 Magento Slack
 =============
 
-Magento Slack allows you to send specific and/or custom events to a definable room. 
+Magento Slack allows you to send notifications events to a Slack channel. 
 
 Facts
 -----
