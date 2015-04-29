@@ -85,6 +85,15 @@ POSSIBILITY OF SUCH DAMAGE.
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </channel>
+                        <icon>
+                            <label>Icon</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <comment>For more informations see: https://my.slack.com/customize/emoji</comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </icon>
                         <username translate="label">
                             <label>Username</label>
                             <frontend_type>text</frontend_type>

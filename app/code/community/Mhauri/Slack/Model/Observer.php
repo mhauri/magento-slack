@@ -57,9 +57,8 @@ class Mhauri_Slack_Model_Observer
 
     /**
      * Send a notification when a new customer account is created
-     * @param $observer
      */
-    public function notifyNewCustomer($observer)
+    public function notifyNewCustomer()
     {
         if($this->_getConfig(Mhauri_Slack_Model_Notification::NEW_CUSTOMER_ACCOUNT_PATH)) {
             $this->_notificationModel

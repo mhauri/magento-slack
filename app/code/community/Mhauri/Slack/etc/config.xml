@@ -75,7 +75,8 @@
             <api>
                 <username>Magento Slack</username>
                 <webhook_url/>
-                <channel/>
+                <channel>#general</channel>
+                <icon>:bell:</icon>
             </api>
             <notification>
                 <new_order>0</new_order>

@@ -26,7 +26,10 @@ class Mhauri_Slack_Model_Notification extends Mage_Core_Model_Abstract
 {
 
     const LOG_FILE                      = 'slack.log';
+
     const DEFAULT_SENDER                = 'Magento Slack';
+    const DEFAULT_CHANNEL               = '#general';
+    const DEFAULT_ICON                  = ':bell:';
 
     const ENABLE_NOTIFICATION_PATH      = 'slack/general/enable_notification';
     const ENABLE_LOG_PATH               = 'slack/general/enable_log';
@@ -34,6 +37,7 @@ class Mhauri_Slack_Model_Notification extends Mage_Core_Model_Abstract
     const WEBHOOK_URL_PATH              = 'slack/api/webhook_url';
     const CHANNEL_PATH                  = 'slack/api/channel';
     const USERNAME_PATH                 = 'slack/api/username';
+    const ICON_PATH                     = 'slack/api/icon';
 
     const NEW_ORDER_PATH                = 'slack/notification/new_order';
     const NEW_CUSTOMER_ACCOUNT_PATH     = 'slack/notification/new_customer_account';
@@ -50,6 +54,11 @@ class Mhauri_Slack_Model_Notification extends Mage_Core_Model_Abstract
      * @var string
      */
     private $_channel       = null;
+
+    /**
+     * @var null
+     */
+    private $_icon          = self::DEFAULT_ICON;
 
     /**
      * Store room id
@@ -69,10 +78,8 @@ class Mhauri_Slack_Model_Notification extends Mage_Core_Model_Abstract
         $this->setWebhookUrl(Mage::getStoreConfig(self::WEBHOOK_URL_PATH, 0));
         $this->setUsername(Mage::getStoreConfig(self::USERNAME_PATH, 0));
         $this->setChannel(Mage::getStoreConfig(self::CHANNEL_PATH, 0));
-
-        if($this->isEnabled()) {
-            $this->_webhook = Mage::getStoreConfig(self::WEBHOOK_URL_PATH, 0);
-        }
+        $this->setIcon(Mage::getStoreConfig(self::ICON_PATH, 0));
+        $this->setWebhookUrl(Mage::getStoreConfig(self::WEBHOOK_URL_PATH, 0));
         parent::_construct();
     }
 
@@ -119,7 +126,27 @@ class Mhauri_Slack_Model_Notification extends Mage_Core_Model_Abstract
             return $this->_channel;
         }
 
-        return '';
+        return self::DEFAULT_CHANNEL;
+    }
+
+    /**
+     * @param $icon
+     * @return $this
+     */
+    public function setIcon($icon)
+    {
+        if(is_string($icon)) {
+            $this->_icon = $icon;
+        }
+        return $this;
+    }
+
+    /**
+     * @return null
+     */
+    public function getIcon()
+    {
+        return $this->_icon;
     }
 
     /**
@@ -176,13 +203,18 @@ class Mhauri_Slack_Model_Notification extends Mage_Core_Model_Abstract
      */
     public function send()
     {
+        if(!$this->isEnabled()) {
+            Mage::log('Slack Notifications are not enabled!', Zend_Log::ERR, self::LOG_FILE, true);
+            return false;
+        }
 
         $params = array(
-            'channel'   => $this->getChannel(),
-            'username'  => $this->getUsername(),
-            'text'      => $this->getMessage(),
-            'mrkdwn'    => true,
-            'mrkdwn_in' => '["text"]'
+            'channel'       => $this->getChannel(),
+            'username'      => $this->getUsername(),
+            'text'          => $this->getMessage(),
+            'icon_emoji'    => $this->getIcon(),
+            'mrkdwn'        => true,
+            'mrkdwn_in'     => '["text"]'
         );
 
         $ch = curl_init();
@@ -192,7 +224,6 @@ class Mhauri_Slack_Model_Notification extends Mage_Core_Model_Abstract
         curl_setopt($ch, CURLOPT_URL, $this->getWebhookUrl());
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, array('payload' => json_encode($params)));
-
 
         if(curl_exec($ch)) {
             if(Mage::getStoreConfig(self::ENABLE_LOG_PATH, 0)) {
@@ -207,5 +238,6 @@ class Mhauri_Slack_Model_Notification extends Mage_Core_Model_Abstract
             Mage::log($params, Zend_Log::ERR, self::LOG_FILE, true);
         }
         curl_close($ch);
+        return true;
     }
 }
