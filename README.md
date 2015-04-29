@@ -46,6 +46,8 @@ Contribution
 ------------
 Any contribution is highly appreciated. The best way to contribute code is to open a [pull request on GitHub](https://help.github.com/articles/using-pull-requests).
 
+See also: [TODO List](https://github.com/mhauri/magento-slack/blob/master/TODO.md)
+
 Developer
 ---------
 Marcel Hauri and all other [contributors](https://github.com/mhauri/magento-slack/contributors)
