@@ -22,35 +22,33 @@
  * @author Marcel Hauri <marcel@hauri.me>
  */
 
-class Mhauri_Slack_Model_Notification extends Mhauri_Slack_Model_Abstract
+class Mhauri_Slack_Model_Resource_Queue extends Mage_Core_Model_Resource_Db_Abstract
 {
-
-    public function send()
+    protected function _construct()
     {
-        if(!$this->isEnabled()) {
-            Mage::log('Slack Notifications are not enabled!', Zend_Log::ERR, self::LOG_FILE, true);
-            return false;
+        $this->_init('mhauri_slack/queue', 'message_id');
+    }
+
+    /**
+     * @param Mage_Core_Model_Abstract $object
+     * @return Mage_Core_Model_Resource_Db_Abstract
+     */
+    protected function _beforeSave(Mage_Core_Model_Abstract $object)
+    {
+        if ($object->isObjectNew()) {
+            $object->setCreatedAt($this->formatDate(true));
         }
+        return parent::_beforeSave($object);
+    }
 
-        $params = array(
-            'channel'       => $this->getChannel(),
-            'username'      => $this->getUsername(),
-            'text'          => $this->getMessage(),
-            'icon_emoji'    => $this->getIcon(),
-            'mrkdwn'        => true,
-            'mrkdwn_in'     => '["text"]'
-        );
-
-        if(Mage::getStoreConfig(self::USE_QUEUE, 0)) {
-            Mage::getModel('mhauri_slack/queue')->addMessageToQueue($params);
-        } else {
-            try {
-                $this->sendMessage($params);
-            } catch (Exception $e) {
-                Mage::log($e->getMessage(), Zend_Log::ERR, Mhauri_Slack_Model_Abstract::LOG_FILE);
-            }
-
-        }
-        return true;
+    /**
+     * Remove the sent messages from queue
+     *
+     * @return $this
+     */
+    public function removeSentMessages()
+    {
+        $this->_getWriteAdapter()->delete($this->getMainTable(), 'processed_at IS NOT NULL');
+        return $this;
     }
 }

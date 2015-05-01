@@ -22,35 +22,30 @@
  * @author Marcel Hauri <marcel@hauri.me>
  */
 
-class Mhauri_Slack_Model_Notification extends Mhauri_Slack_Model_Abstract
-{
+/* @var $installer Mage_Core_Model_Resource_Setup */
+$installer = $this;
+$installer->startSetup();
 
-    public function send()
-    {
-        if(!$this->isEnabled()) {
-            Mage::log('Slack Notifications are not enabled!', Zend_Log::ERR, self::LOG_FILE, true);
-            return false;
-        }
+$table = $installer->getConnection()
+    ->newTable($installer->getTable('mhauri_slack/queue'))
+    ->addColumn('message_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
+            'identity'  => true,
+            'unsigned'  => true,
+            'nullable'  => false,
+            'primary'   => true,
+        ), 'Message Id')
+    ->addColumn('message_params', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
+            'nullable'  => false,
+            'default'   => '',
+        ), 'Message Parameters')
+    ->addColumn('created_at', Varien_Db_Ddl_Table::TYPE_TIMESTAMP, null, array(
+            'nullable'  => true,
+        ), 'Created At')
+    ->addColumn('processed_at', Varien_Db_Ddl_Table::TYPE_TIMESTAMP, null, array(
+            'nullable'  => true,
+        ), 'Processed At')
+    ->setComment('Slack Message Queue');
 
-        $params = array(
-            'channel'       => $this->getChannel(),
-            'username'      => $this->getUsername(),
-            'text'          => $this->getMessage(),
-            'icon_emoji'    => $this->getIcon(),
-            'mrkdwn'        => true,
-            'mrkdwn_in'     => '["text"]'
-        );
+$installer->getConnection()->createTable($table);
 
-        if(Mage::getStoreConfig(self::USE_QUEUE, 0)) {
-            Mage::getModel('mhauri_slack/queue')->addMessageToQueue($params);
-        } else {
-            try {
-                $this->sendMessage($params);
-            } catch (Exception $e) {
-                Mage::log($e->getMessage(), Zend_Log::ERR, Mhauri_Slack_Model_Abstract::LOG_FILE);
-            }
-
-        }
-        return true;
-    }
-}
+$installer->endSetup();

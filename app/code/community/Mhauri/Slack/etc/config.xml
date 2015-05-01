@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Mhauri_Slack>
-            <version>0.2.0</version>
+            <version>0.4.0</version>
         </Mhauri_Slack>
     </modules>
     <global>
@@ -14,13 +14,26 @@
         <models>
             <mhauri_slack>
                 <class>Mhauri_Slack_Model</class>
+                <resourceModel>mhauri_slack_resource</resourceModel>
             </mhauri_slack>
+            <mhauri_slack_resource>
+                <class>Mhauri_Slack_Model_Resource</class>
+                <entities>
+                    <queue>
+                        <table>slack_queue</table>
+                    </queue>
+                </entities>
+            </mhauri_slack_resource>
         </models>
         <resources>
             <mhauri_slack_setup>
                 <setup>
                     <module>Mhauri_Slack</module>
+                    <class>Mage_Core_Model_Resource_Setup</class>
                 </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
             </mhauri_slack_setup>
         </resources>
         <events>
@@ -53,7 +66,6 @@
             </controller_action_predispatch_customer_account_createpost>
         </events>
     </global>
-
     <adminhtml>
         <translate>
             <modules>
@@ -65,12 +77,12 @@
             </modules>
         </translate>
     </adminhtml>
-
     <default>
         <slack>
             <general>
                 <enable_notification>0</enable_notification>
                 <enable_log>0</enable_log>
+                <use_queue>1</use_queue>
             </general>
             <api>
                 <username>Magento Slack</username>
@@ -85,4 +97,16 @@
             </notification>
         </slack>
     </default>
+    <crontab>
+        <jobs>
+            <mhauri_slack_queue_send_all>
+                <schedule><cron_expr>*/1 * * * *</cron_expr></schedule>
+                <run><model>mhauri_slack/queue::sendQueuedMessages</model></run>
+            </mhauri_slack_queue_send_all>
+            <mhauri_slack_queue_clean_up>
+                <schedule><cron_expr>0 0 * * *</cron_expr></schedule>
+                <run><model>mhauri_slack/queue::cleanQueue</model></run>
+            </mhauri_slack_queue_clean_up>
+        </jobs>
+    </crontab>
 </config>

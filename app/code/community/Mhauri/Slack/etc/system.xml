@@ -59,6 +59,16 @@ POSSIBILITY OF SUCH DAMAGE.
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </enable_log>
+                        <use_queue translate="label">
+                            <label>Use Message Queue</label>
+                            <frontend_type>select</frontend_type>
+                            <comment>Preferred way as it is more safe an will not block any interactions (cronjob must run!)</comment>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </use_queue>
                     </fields>
                 </general>
                 <api>
