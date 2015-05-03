@@ -56,7 +56,7 @@
             </admin_session_user_login_failed>
             <controller_action_predispatch_customer_account_createpost>
                 <observers>
-                    <notifyNewCustomer>s
+                    <notifyNewCustomer>
                         <class>Mhauri_Slack_Model_Observers_NewCustomer</class>
                         <method>notify</method>
                     </notifyNewCustomer>
