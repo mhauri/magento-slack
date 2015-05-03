@@ -36,35 +36,34 @@
                 </connection>
             </mhauri_slack_setup>
         </resources>
+
         <events>
             <sales_order_place_after>
                 <observers>
                     <notifyNewOrder>
-                        <type>singleton</type>
-                        <class>Mhauri_Slack_Model_Observer</class>
-                        <method>notifyNewOrder</method>
+                        <class>Mhauri_Slack_Model_Observers_NewOrder</class>
+                        <method>notify</method>
                     </notifyNewOrder>
                 </observers>
             </sales_order_place_after>
             <admin_session_user_login_failed>
                 <observers>
                     <notifyAdminUserLoginFailed>
-                        <type>singleton</type>
-                        <class>Mhauri_Slack_Model_Observer</class>
-                        <method>notifyAdminUserLoginFailed</method>
+                        <class>Mhauri_Slack_Model_Observers_AdminUserLoginFailed</class>
+                        <method>notify</method>
                     </notifyAdminUserLoginFailed>
                 </observers>
             </admin_session_user_login_failed>
             <controller_action_predispatch_customer_account_createpost>
                 <observers>
-                    <notifyNewCustomer>
-                        <type>singleton</type>
-                        <class>Mhauri_Slack_Model_Observer</class>
-                        <method>notifyNewCustomer</method>
+                    <notifyNewCustomer>s
+                        <class>Mhauri_Slack_Model_Observers_NewCustomer</class>
+                        <method>notify</method>
                     </notifyNewCustomer>
                 </observers>
             </controller_action_predispatch_customer_account_createpost>
         </events>
+
     </global>
     <adminhtml>
         <translate>
