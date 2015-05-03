@@ -19,26 +19,17 @@
  *
  * @category Notification
  * @package mhauri-slack
- * @author Marcel Hauri <marcel@hauri.me>
+ * @author Marcel Hauri <marcel@hauri.me>, Sander Mangel <https://github.com/sandermangel>
  */
 
-class Mhauri_Slack_Model_Observer
+class Mhauri_Slack_Model_Observers_NewOrder
+ extends Mhauri_Slack_Model_Observers_Abstract
 {
-    private $_notificationModel = null;
-
-    private $_helper = null;
-
-    public function __construct()
-    {
-        $this->_notificationModel   = Mage::getSingleton('mhauri_slack/notification');
-        $this->_helper              = Mage::helper('mhauri_slack');
-    }
-
     /**
      * Send a notification when a new order was placed
      * @param $observer
      */
-    public function notifyNewOrder($observer)
+    public function notify($observer)
     {
         if($this->_getConfig(Mhauri_Slack_Model_Notification::NEW_ORDER_PATH)) {
             $message = $this->_helper->__("*A new order has been placed.* \n*Order ID:* %s, *Name:* %s %s, *Amount:* %s %s",
@@ -47,45 +38,11 @@ class Mhauri_Slack_Model_Observer
                 $observer->getOrder()->getCustomer()->getLastname(),
                 $observer->getOrder()->getQuoteBaseGrandTotal(),
                 $observer->getOrder()->getOrderCurrencyCode()
-                );
+            );
 
             $this->_notificationModel
                 ->setMessage($message)
                 ->send();
         }
-    }
-
-    /**
-     * Send a notification when a new customer account is created
-     */
-    public function notifyNewCustomer()
-    {
-        if($this->_getConfig(Mhauri_Slack_Model_Notification::NEW_CUSTOMER_ACCOUNT_PATH)) {
-            $this->_notificationModel
-                ->setMessage($this->_helper->__("*A new customer account was created*"))
-                ->send();
-        }
-    }
-
-    /**
-     * Send a notification when admin user login failed
-     * @param $observer
-     */
-    public function notifyAdminUserLoginFailed($observer)
-    {
-        if($this->_getConfig(Mhauri_Slack_Model_Notification::ADMIN_USER_LOGIN_FAILED_PATH)) {
-            $this->_notificationModel
-                ->setMessage($this->_helper->__("*Admin user login failed with username:* %s", $observer->getUserName()))
-                ->send();
-        }
-    }
-
-    /**
-     * @param $path
-     * @return mixed
-     */
-    private function _getConfig($path)
-    {
-        return Mage::getStoreConfig($path, 0);
     }
 }

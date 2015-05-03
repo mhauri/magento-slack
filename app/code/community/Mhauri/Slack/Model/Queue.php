@@ -41,6 +41,10 @@ class Mhauri_Slack_Model_Queue extends Mhauri_Slack_Model_Abstract
 
         try {
             $this->save();
+
+            if(Mage::getStoreConfig(self::ENABLE_LOG_PATH, 0)) {
+                Mage::log('Queued message: "' . $params['text'] . '"', Zend_Log::ERR, self::LOG_FILE, true);
+            }
         } catch(Exception $e) {
             Mage::log($e->getMessage(), Zend_log::ERR, Mhauri_Slack_Model_Abstract::LOG_FILE);
         }
