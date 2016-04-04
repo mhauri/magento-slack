@@ -4,7 +4,7 @@
     "type": "magento-module",
     "description": "Magento Slack allows you to send specific and/or custom events to a definable room.",
     "require": {
-        "magento-hackathon/magento-composer-installer": "2.*"
+        "magento-hackathon/magento-composer-installer": "*"
     },
     "authors":[
         {
