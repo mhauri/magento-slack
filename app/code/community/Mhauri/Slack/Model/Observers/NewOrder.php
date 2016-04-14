@@ -25,19 +25,37 @@
 class Mhauri_Slack_Model_Observers_NewOrder
  extends Mhauri_Slack_Model_Observers_Abstract
 {
+
+    /**
+     * Get customer name
+     * @param Object $_order
+     * @return String $customerName
+     */
+    public function getCustomerName($_order)
+    {
+        if ($_order->getCustomer()->getFirstname()) {
+            $customerName = $_order->getCustomer()->getFirstname() . ' ' . $_order->getCustomer()->getLastname();
+        }
+        else {
+            $customerName = $_order->getBillingAddress()->getFirstname() . ' ' . $_order->getBillingAddress()->getLastname() . ' (Guest)';
+        }
+        return $customerName;
+    }
+
     /**
      * Send a notification when a new order was placed
      * @param $observer
      */
     public function notify($observer)
     {
+        $_order = $observer->getOrder();
+
         if($this->_getConfig(Mhauri_Slack_Model_Notification::NEW_ORDER_PATH)) {
-            $message = $this->_helper->__("*A new order has been placed.* \n*Order ID:* %s, *Name:* %s %s, *Amount:* %s %s",
-                $observer->getOrder()->getIncrementId(),
-                $observer->getOrder()->getCustomer()->getFirstname(),
-                $observer->getOrder()->getCustomer()->getLastname(),
-                $observer->getOrder()->getQuoteBaseGrandTotal(),
-                $observer->getOrder()->getOrderCurrencyCode()
+            $message = $this->_helper->__("*A new order has been placed.* \n*Order ID:* %s, *Name:* %s, *Amount:* %s %s",
+                $_order->getIncrementId(),
+                $this->getCustomerName($_order),
+                $_order->getQuoteBaseGrandTotal(),
+                $_order->getOrderCurrencyCode()
             );
 
             $this->_notificationModel
