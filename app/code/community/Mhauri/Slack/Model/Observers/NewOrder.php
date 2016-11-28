@@ -22,9 +22,10 @@
  * @author Marcel Hauri <marcel@hauri.me>, Sander Mangel <https://github.com/sandermangel>
  */
 
-class Mhauri_Slack_Model_Observers_NewOrder
- extends Mhauri_Slack_Model_Observers_Abstract
+class Mhauri_Slack_Model_Observers_NewOrder extends Mhauri_Slack_Model_Observers_Abstract
 {
+
+    private $_order_url = '';
 
     /**
      * Get customer name
@@ -49,9 +50,11 @@ class Mhauri_Slack_Model_Observers_NewOrder
     public function notify($observer)
     {
         $_order = $observer->getOrder();
+        $this->_order_url = Mage::helper('adminhtml')->getUrl('adminhtml/sales_order/view/order_id/',['order_id'=> $_order->getId()]);
 
         if($this->_getConfig(Mhauri_Slack_Model_Notification::NEW_ORDER_PATH)) {
-            $message = $this->_helper->__("*A new order has been placed.* \n*Order ID:* %s, *Name:* %s, *Amount:* %s %s",
+            $message = $this->_helper->__("*A new order has been placed.* \n*Order ID:* <%s|%s>, *Name:* %s, *Amount:* %s %s",
+                $this->_order_url,
                 $_order->getIncrementId(),
                 $this->getCustomerName($_order),
                 $_order->getQuoteBaseGrandTotal(),
