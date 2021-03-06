@@ -32,8 +32,10 @@ class Mhauri_Slack_Model_Observers_NewCustomer
     public function notify($observer)
     {
         if($this->_getConfig(Mhauri_Slack_Model_Notification::NEW_CUSTOMER_ACCOUNT_PATH)) {
+            /** @var Mage_Customer_Model_Customer $_customer */
+            $_customer = $observer->getCustomer();
             $this->_notificationModel
-                ->setMessage($this->_helper->__("*A new customer account was created*"))
+                ->setMessage($this->_helper->__("*A new customer account was created*\n*Customer ID:* %s\n*Name:* %s", $_customer->getID(), $_customer->getName()))
                 ->send();
         }
     }

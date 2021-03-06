@@ -54,16 +54,20 @@
                     </notifyAdminUserLoginFailed>
                 </observers>
             </admin_session_user_login_failed>
-            <controller_action_predispatch_customer_account_createpost>
+            <customer_register_success>
                 <observers>
                     <notifyNewCustomer>
                         <class>Mhauri_Slack_Model_Observers_NewCustomer</class>
                         <method>notify</method>
                     </notifyNewCustomer>
                 </observers>
-            </controller_action_predispatch_customer_account_createpost>
+            </customer_register_success>
         </events>
-
+        <log>
+            <core>
+                <writer_model>Mhauri_Slack_Model_Logger</writer_model>
+            </core>
+        </log>
     </global>
     <adminhtml>
         <translate>
